@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = "github.com/kckecheng/poc/grpc/snode";
+
+package snode;
+
+service SNode {
+  rpc Execute(Command) returns (Result) {}
+}
+
+
+message Command {
+  string command = 1;
+}
+
+message Result {
+  string output = 2;
+}

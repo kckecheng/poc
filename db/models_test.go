@@ -79,3 +79,32 @@ func TestRead(t *testing.T) {
 		t.Log(result)
 	}
 }
+
+func TestUpdate(t *testing.T) {
+	cids := []int{}
+	for i := 0; i < 10; i++ {
+		cid := rand.Intn(101)
+		cids = append(cids, cid)
+	}
+
+	commands := []Command{}
+	database.Find(&commands, cids)
+	for _, cmd := range commands {
+		newcli := fmt.Sprintf("%s updated", cmd.Cli)
+		database.Model(&cmd).Update("cli", newcli)
+	}
+
+	results := []Result{}
+	database.Where("command_id IN ?", cids).Find(&results)
+	for _, result := range results {
+		newoutput := fmt.Sprintf("%s updated", result.Output)
+		database.Model(&result).Update("output", newoutput)
+	}
+}
+
+func TestDelete(t *testing.T) {
+	for i := 0; i < 10; i++ {
+		cid := rand.Intn(101)
+		database.Delete(&Command{}, cid)
+	}
+}
